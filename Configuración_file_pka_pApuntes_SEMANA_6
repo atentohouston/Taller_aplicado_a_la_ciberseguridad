@@ -1,0 +1,39 @@
+APUNTES DE NETWORKING semana 6 (Packet Tracer: desafío de integración de habilidades)
+
+Divida la red 172.16.128.0/19 en dos subredes iguales para utilizarse en Branch.
+Primero calculamos la mascara: 255.255.224.0 -> 11111111,11111111,11100000,00000000
+
+                                              | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
+
+Obtener la nueva mascara para la división requerida de subred: (2^1 = 2 sub redes) 11111111,11111111,11110000,00000000 (Agregamos 1 bit de la porción de host a la porción de red). Traduciendo 255.255.240.0 <- Mascara de sub red
+
+Cantidad de host por subredes (12 ceros totales de la mascara de subred) 2^12 - 2= 4094
+
+Salto de red: 256 - 240 = 16                                       256 ( Total de hosts)  240 (Octeto modificado)
+Para obtener la dirección ip de la segunda subred sumamos la diferencia del total de hosts con el octeto modificado al octeto correspondiente de la subred número 2.
+Ahora con la dirección de ambas sub redes se puede determinar la dirección del brodcast de la primera subred y luego la última ip utilizable 
+
+SUB RED	PRIMERA IP 	ULTIMA IP                  BRODCAST
+172.16.128.0     172.16.128.1     172.16.143.254        172.16.143.255
+172.16.144.0     172.16.144.1     172.16.159.254        172.16.159.255
+
+Asigne la última dirección IPv4 utilizable de la segunda subred a la interfaz Gigabit Ethernet 0/0.
+Asigne la última dirección IPv4 utilizable de la primera subred a la interfaz Gigabit Ethernet 0/1.
+
+enable
+configure terminal
+interface g0/0
+ip add 172.16.159.254 255.255.240.0
+no shutdown
+interface g0/1
+ip add 172.16.143.254 255.255.240.0
+no shutdown
+
+Asigna 2001: DB8: ACAD: B1:: 1/64 y 2001: DB8: ACAD: B2:: 1/64 hasta Gigabit Ethernet 0/0 de Branch y hasta Gigabit Ethernet 0/1, respectivamente.
+
+enable
+configure terminal
+interface g0/0
+ipv6 add 2001:DB8:ACAD:B1::1/64
+interface g0/1
+ipv6 add 2001:DB8:ACAD:B2::1/64
